@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Eink Launcher</string>
+    <string name="notification_listener_label">Eink Launcher notification filter</string>
+</resources>

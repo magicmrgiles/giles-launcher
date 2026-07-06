@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+        Pre-Compose window shell only. All real UI colour comes from the Compose
+        theme; this just keeps the cold-start window from flashing a system colour.
+        Light variant here; values-night/themes.xml supplies the dark variant.
+    -->
+    <style name="Theme.EinkLauncher" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+</resources>
