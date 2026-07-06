@@ -75,16 +75,14 @@ core feature that genuinely uses notification data and complete the Play Console
 be rejected. That's why the toggle is opt-in and does nothing until the user explicitly
 grants access.
 
-## Design decision to flag
+## App icons
 
-The JSX prototype uses a hand-picked icon per app from a fixed pool, and the home grid shows
-**no text labels**. A real launcher pins arbitrary installed apps, for which no monochrome
-outline glyph exists — and the strict "no greys" rule rules out desaturating real
-(colourful) app icons. So each grid/picker tile renders the app's **monogram** (first
-letter) inside the outline tile, with a **small uppercase label beneath grid tiles** for
-disambiguation. This keeps the app strictly black-and-white and usable. If you'd prefer
-label-less tiles or real (monochrome-filtered) icons instead, that's a small change in
-`AppGrid.kt` / `AppPickerSheet.kt`.
+Grid and picker tiles render each app's **real launcher icon put through a monochrome
+filter** (`ui/icons/AppIcon.kt`): the icon is desaturated to greyscale with a slight
+contrast boost, and in dark mode its luminance is inverted so it reads as light marks on
+black. If an icon can't be loaded, the tile falls back to the app's monogram. The home grid
+is label-less, matching the prototype — the icons carry recognition; the picker keeps labels.
+Bitmaps are rasterised once off the main thread and cached per (app, theme).
 
 ## Project layout
 

@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.giles.einklauncher.data.apps.AppInfo
+import com.giles.einklauncher.ui.icons.AppIconImage
 import com.giles.einklauncher.ui.components.EinkBottomSheet
 import com.giles.einklauncher.ui.components.noRippleClickable
 import com.giles.einklauncher.ui.theme.EinkType
@@ -141,7 +142,14 @@ private fun PickerTile(app: AppInfo, onClick: () -> Unit) {
                 .background(colors.background),
             contentAlignment = Alignment.Center,
         ) {
-            Text(app.monogram, style = EinkType.Monogram, color = colors.content)
+            AppIconImage(
+                ref = app.ref,
+                fallback = app.monogram,
+                modifier = Modifier
+                    .size(48.dp)
+                    .padding(6.dp)
+                    .clip(RoundedCornerShape(11.dp)),
+            )
         }
         Text(
             text = app.label,

@@ -17,20 +17,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.giles.einklauncher.data.apps.PinnedAppRef
 import com.giles.einklauncher.ui.PinnedSlot
 import com.giles.einklauncher.ui.components.noRippleClickable
 import com.giles.einklauncher.ui.components.noRippleCombinedClickable
-import com.giles.einklauncher.ui.theme.EinkType
+import com.giles.einklauncher.ui.icons.AppIconImage
 import com.giles.einklauncher.ui.theme.einkColors
 
 /**
@@ -99,75 +96,63 @@ private fun GridTile(
     onEmptyTap: (Int) -> Unit,
 ) {
     val colors = einkColors
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
-    ) {
-        Box(contentAlignment = Alignment.TopEnd) {
-            Box(
-                modifier = Modifier
-                    .size(52.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .border(1.dp, colors.content, RoundedCornerShape(16.dp))
-                    .background(colors.background)
-                    .noRippleCombinedClickable(
-                        onClick = {
-                            when (slot) {
-                                is PinnedSlot.Empty -> onEmptyTap(slot.index)
-                                is PinnedSlot.Filled -> if (!editMode) onLaunch(slot.ref)
-                            }
-                        },
-                        onLongClick = {
-                            if (slot is PinnedSlot.Filled) onEnterEdit()
-                        },
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                when (slot) {
-                    is PinnedSlot.Empty -> Icon(
-                        imageVector = Icons.Outlined.Add,
-                        contentDescription = "Add app",
-                        tint = colors.content,
-                        modifier = Modifier.size(20.dp),
-                    )
+    // Label-less grid, matching the prototype — real (monochrome) icons carry recognition.
+    Box(contentAlignment = Alignment.TopEnd) {
+        Box(
+            modifier = Modifier
+                .size(52.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .border(1.dp, colors.content, RoundedCornerShape(16.dp))
+                .background(colors.background)
+                .noRippleCombinedClickable(
+                    onClick = {
+                        when (slot) {
+                            is PinnedSlot.Empty -> onEmptyTap(slot.index)
+                            is PinnedSlot.Filled -> if (!editMode) onLaunch(slot.ref)
+                        }
+                    },
+                    onLongClick = {
+                        if (slot is PinnedSlot.Filled) onEnterEdit()
+                    },
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            when (slot) {
+                is PinnedSlot.Empty -> Icon(
+                    imageVector = Icons.Outlined.Add,
+                    contentDescription = "Add app",
+                    tint = colors.content,
+                    modifier = Modifier.size(20.dp),
+                )
 
-                    is PinnedSlot.Filled -> Text(
-                        text = slot.monogram(),
-                        style = EinkType.Monogram,
-                        color = colors.content,
-                    )
-                }
-            }
-
-            if (editMode && slot is PinnedSlot.Filled) {
-                Box(
+                is PinnedSlot.Filled -> AppIconImage(
+                    ref = slot.ref,
+                    fallback = slot.monogram(),
                     modifier = Modifier
-                        .offset(x = 6.dp, y = (-6).dp)
-                        .size(18.dp)
-                        .clip(CircleShape)
-                        .background(colors.content)
-                        .noRippleClickable { onRemove(slot.index) },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Close,
-                        contentDescription = "Remove app",
-                        tint = colors.background,
-                        modifier = Modifier.size(11.dp),
-                    )
-                }
+                        .size(52.dp)
+                        .padding(6.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                )
             }
         }
 
-        if (slot is PinnedSlot.Filled) {
-            Text(
-                text = slot.label.uppercase(),
-                style = EinkType.AppLabel,
-                color = colors.content,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center,
-            )
+        if (editMode && slot is PinnedSlot.Filled) {
+            Box(
+                modifier = Modifier
+                    .offset(x = 6.dp, y = (-6).dp)
+                    .size(18.dp)
+                    .clip(CircleShape)
+                    .background(colors.content)
+                    .noRippleClickable { onRemove(slot.index) },
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Close,
+                    contentDescription = "Remove app",
+                    tint = colors.background,
+                    modifier = Modifier.size(11.dp),
+                )
+            }
         }
     }
 }
